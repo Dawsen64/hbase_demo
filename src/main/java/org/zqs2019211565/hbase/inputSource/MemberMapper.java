@@ -9,8 +9,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.Text;
 import java.io.IOException;
 
-/*
- * HBase中的表作为输入源
+/**
  * 扩展自Mapper类，所有以HBase作为输入源的Mapper类需要继承该类
  */
 public class MemberMapper extends TableMapper<Writable, Writable> {
@@ -20,7 +19,7 @@ public class MemberMapper extends TableMapper<Writable, Writable> {
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
-    }
+        }
 
     @Override
     protected void map(ImmutableBytesWritable row, Result columns, Context context)
@@ -33,10 +32,11 @@ public class MemberMapper extends TableMapper<Writable, Writable> {
         byte[] columnFamily = null;
         // 一行中所有列名
         byte[] columnQualifier = null;
+        //时间戳
         long ts = 0L;
 
         try {
-            // 便利一行中所有列
+            // 遍历一行中所有列
             for (Cell cell : columns.listCells()) {
                 // 单元格的值
                 value = Bytes.toStringBinary(cell.getValueArray());
@@ -52,6 +52,7 @@ public class MemberMapper extends TableMapper<Writable, Writable> {
                 context.write(k, v);
             }
         } catch (Exception e) {
+            //出错信息
             e.printStackTrace();
             System.err.println("Error:" + e.getMessage() + ",Row:" + Bytes.toString(row.get()) + ",Value" + value);
         }

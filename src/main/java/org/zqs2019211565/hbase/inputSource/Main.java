@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-/*
+/**
  * HBase作为输入源，从HBase表中读取数据，使用MapReduce计算完成之后，将数据储存到HDFS中
  */
 public class Main {
@@ -34,6 +34,7 @@ public class Main {
         scan.setBatch(0);
         scan.setCaching(10000);
         scan.setMaxVersions();
+        //时间范围是3天
         scan.setTimeRange(System.currentTimeMillis() - 3 * 24 * 3600 * 1000L, System.currentTimeMillis());
         // 添加扫描的条件，列族和列族名
         scan.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("keyword"));
